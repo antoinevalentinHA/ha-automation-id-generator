@@ -1,0 +1,33 @@
+title: Automation ID Generator
+icon: mdi:numeric
+
+views:
+  - title: Automation IDs
+    path: automation-ids
+    icon: mdi:format-list-numbered
+    cards:
+      - type: vertical-stack
+        cards:
+
+          - type: markdown
+            content: |
+              ## 🆔 Automation ID Generator
+              Select a prefix, then click **Generate** to get the next available automation ID.
+
+          - type: tile
+            entity: input_select.prefix_id_select
+            name: Automation domain (prefix)
+            features_position: bottom
+            features:
+              - type: select-options
+
+          - type: button
+            name: Generate next ID
+            icon: mdi:calculator
+            tap_action:
+              action: call-service
+              service: script.generate_next_id_from_prefix
+
+          - type: tile
+            entity: input_text.next_id_result
+            name: Next available ID
