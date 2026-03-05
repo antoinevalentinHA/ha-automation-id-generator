@@ -8,6 +8,12 @@ This tool scans existing automations in Home Assistant, extracts their IDs, and 
 
 ---
 
+## Screenshot
+
+![Automation ID Generator Dashboard](dashboard-example.png)
+
+---
+
 # Why?
 
 Home Assistant does not provide a built-in way to generate consistent automation IDs.
