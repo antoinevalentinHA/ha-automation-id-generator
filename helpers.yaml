@@ -3,8 +3,20 @@ input_text:
   prefix_id:
     name: Automation ID prefix
     pattern: '^[0-9]+$'
+    mode: text
     max: 10
 
   next_id_result:
     name: Next automation ID
+    mode: text
     max: 20
+
+input_select:
+
+  prefix_id_select:
+    name: Automation prefix
+    options:
+      - "1001 - example_domain_1"
+      - "1002 - example_domain_2"
+      - "1012 - system"
+    icon: mdi:numeric
