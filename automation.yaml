@@ -1,0 +1,22 @@
+# ==========================================================
+#  AUTOMATION : Sync prefix select -> input_text.prefix_id
+# ----------------------------------------------------------
+#  Role:
+#    Copy the selected prefix from input_select.prefix_id_select
+#    into input_text.prefix_id (used by the generator script).
+#
+#  Behavior:
+#    - Expects options like: "1012 - System"
+#    - Writes only the prefix part (before " - ")
+# ==========================================================
+
+- alias: "Sync prefix select to input_text.prefix_id"
+  trigger:
+    - platform: state
+      entity_id: input_select.prefix_id_select
+  action:
+    - service: input_text.set_value
+      target:
+        entity_id: input_text.prefix_id
+      data:
+        value: "{{ states('input_select.prefix_id_select').split(' - ')[0] | trim }}"
