@@ -1,0 +1,54 @@
+generate_next_id_from_prefix:
+  alias: "Generate next automation ID from prefix"
+  mode: single
+
+  sequence:
+
+    - variables:
+        prefix: "{{ (states('input_text.prefix_id') | default('') | trim) | string }}"
+
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ prefix in ['unknown','unavailable','none','', None] }}"
+          sequence:
+            - stop: "Prefix empty"
+
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ not (prefix | regex_match('^[0-9]+$')) }}"
+          sequence:
+            - stop: "Prefix must be numeric"
+
+    - variables:
+        suffixes: >-
+          {% set ns = namespace(ids=[]) %}
+          {% set p = (prefix | string) %}
+          {% for s in states.automation %}
+            {% set aid = (state_attr(s.entity_id, 'id') | default('') | string) %}
+            {% if aid.startswith(p) %}
+              {% set tail = aid[p | length:] %}
+              {% if tail | regex_match('^[0-9]+$') %}
+                {% set ns.ids = ns.ids + [tail | int] %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.ids }}
+
+    - variables:
+        next_suffix: "{{ (suffixes | max + 1) if (suffixes | length > 0) else 1 }}"
+        next_id: "{{ prefix }}{{ '%010d' | format(next_suffix) }}"
+
+    - service: input_text.set_value
+      target:
+        entity_id: input_text.next_id_result
+      data:
+        value: "{{ next_id }}"
+
+    - event: logbook_entry
+      event_data:
+        name: "Automation ID Generator"
+        message: "Generated ID: {{ next_id }}"
+        domain: automation
+        entity_id: input_text.next_id_result
