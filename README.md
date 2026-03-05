@@ -86,6 +86,9 @@ input_select:
 
 The `input_select` provides a convenient way to choose a domain prefix.
 
+The script extracts the numeric prefix from the selected option
+and writes the generated ID to `input_text.next_id_result`.
+
 ---
 
 ## 2. Add the Script
