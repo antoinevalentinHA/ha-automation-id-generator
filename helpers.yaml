@@ -1,0 +1,10 @@
+input_text:
+
+  prefix_id:
+    name: Automation ID prefix
+    pattern: '^[0-9]+$'
+    max: 10
+
+  next_id_result:
+    name: Next automation ID
+    max: 20
